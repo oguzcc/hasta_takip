@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:hasta_takip/feature/home/video_page.dart';
 import 'package:hasta_takip/feature/home/yeniPlayer2.dart';
 
 class CameraPage extends StatefulWidget {

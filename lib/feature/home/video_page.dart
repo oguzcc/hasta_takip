@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:video_player/video_player.dart';
 
 class VideoPage extends StatefulWidget {
@@ -55,6 +56,13 @@ class _VideoPageState extends State<VideoPage> {
                       child: VideoPlayer(_videoPlayerController),
                     )
                   : Container(),
+            ),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("KAYIT",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 50))),
             ),
           ],
         ),
