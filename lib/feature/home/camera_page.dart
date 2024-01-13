@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hasta_takip/feature/home/video_page.dart';
+import 'package:hasta_takip/feature/home/yeniPlayer2.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class _CameraPageState extends State<CameraPage> {
       setState(() => _isRecording = false);
       final route = MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (_) => VideoPage(filePath: file.path),
+        builder: (_) => YeniPlayer2(filePath: file.path),
         //builder: (_) => const Dusme(),
       );
       Navigator.push(context, route);
