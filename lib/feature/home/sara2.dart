@@ -16,6 +16,7 @@ class Sara2 extends StatefulWidget {
 
 class _Sara2State extends State<Sara2> {
   static const countdownDuration = Duration(seconds: 10);
+
   var seconds = 10;
   Duration duration = const Duration(seconds: 10);
   Timer? timer;

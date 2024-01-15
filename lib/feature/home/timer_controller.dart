@@ -1,11 +1,22 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class TimerController extends ChangeNotifier {
-  static TimerController? _instance;
-  static TimerController get instance {
-    _instance ??= TimerController._init();
-    return _instance!;
+class TimerController {
+  late Timer _timer;
+  int _elapsedSeconds = 0;
+
+  bool get isRunning => _timer.isActive;
+
+  void start() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _elapsedSeconds++;
+    });
   }
 
-  TimerController._init();
+  void stop() {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
+  }
+
+  int get elapsedSeconds => _elapsedSeconds;
 }

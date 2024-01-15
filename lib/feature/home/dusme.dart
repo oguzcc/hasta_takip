@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'timer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/feature/home/sara2.dart';
@@ -15,6 +15,7 @@ class Dusme extends StatefulWidget {
 }
 
 class _DusmeState extends State<Dusme> {
+  final TimerController timerController = TimerController();
   double posX = 180, posY = 350, posZ = 350;
   double posaccX = 180, posaccY = 350, posaccZ = 350;
   double vtoplamAcc = 0;
@@ -65,6 +66,7 @@ class _DusmeState extends State<Dusme> {
 
                   if (vector > 3.5 && vector < 5) {
                     if (vtoplamGyr > 3) {
+                      timerController.start();
                       WidgetsBinding.instance.addPostFrameCallback(
                         (_) => Navigator.pushReplacement(
                           context,

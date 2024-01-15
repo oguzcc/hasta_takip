@@ -13,9 +13,9 @@ import 'package:hasta_takip/feature/home/sara2.dart';
 import 'package:hasta_takip/feature/home/seizure_record_page.dart';
 import 'package:hasta_takip/feature/home/seizure_record_video_page.dart';
 import 'package:hasta_takip/feature/home/social_network_page.dart';
+import 'package:hasta_takip/feature/home/timer_controller.dart';
 import 'package:hasta_takip/feature/home/yeniPlayer2.dart';
 import 'package:hasta_takip/ui_kit/layout/bottom_navbar_scaffold.dart';
-
 import 'screens.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -29,6 +29,8 @@ final GlobalKey<NavigatorState> seizureRecords =
 final GlobalKey<NavigatorState> reminders =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 final GlobalKey<NavigatorState> socialNetwork =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> yeniPlayer2 =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final goRouter = GoRouter(

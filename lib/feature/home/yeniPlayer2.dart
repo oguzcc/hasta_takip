@@ -1,49 +1,56 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 class YeniPlayer2 extends StatefulWidget {
   final String filePath;
 
   const YeniPlayer2({Key? key, required this.filePath}) : super(key: key);
   @override
-  _YeniPlayer2State createState() => _YeniPlayer2State();
+  YeniPlayer2State createState() => YeniPlayer2State();
 }
 
-class _YeniPlayer2State extends State<YeniPlayer2> {
+class YeniPlayer2State extends State<YeniPlayer2> {
   File? _selectedVideo;
   final picker = ImagePicker();
+  DateTime now = DateTime.now();
+  late VideoPlayerController _videoPlayerController;
+  final String phoneNumber = "00905415436786"; // Hedef telefon numarası
+  final String message = "Merhaba, bu bir test SMS'dir."; // Gönderilecek mesaj
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Firebase Storage Video Upload'),
+        title: const Text('video seçiniz ve sms gönderiniz.'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _selectedVideo == null
-                ? const Text('No video selected.')
+                ? const Text('video seçilmedi')
                 : VideoPlayerWidget(_selectedVideo!),
             ElevatedButton(
               onPressed: () async {
                 await _pickVideo();
               },
-              child: const Text('Pick a Video'),
+              child: const Text('Video seçiniz'),
             ),
             ElevatedButton(
               onPressed: () async {
                 await _uploadVideo();
               },
-              child: const Text('Upload Video to Firebase Storage'),
+              child: const Text('veri tabanına video yükleyiniz.'),
             ),
           ],
         ),
@@ -62,15 +69,34 @@ class _YeniPlayer2State extends State<YeniPlayer2> {
         setState(() {
           _selectedVideo = file;
         });
+        _videoPlayerController = VideoPlayerController.file(_selectedVideo!);
+        await _videoPlayerController.play();
       }
     } catch (e) {
       print('Error picking video: $e');
     }
   }
 
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
+  }
+
+  void _sendSMS() async {
+    List<String> recipents = [phoneNumber];
+
+    String _result = await sendSMS(message: message, recipients: recipents)
+        .catchError((onError) {
+      debugPrint(onError);
+    });
+
+    debugPrint(_result);
+  }
+
   Future<void> _uploadVideo() async {
     if (_selectedVideo == null) {
-      print('No video selected.');
+      print('Video seçilmedi');
       return;
     }
 
@@ -89,15 +115,21 @@ class _YeniPlayer2State extends State<YeniPlayer2> {
 
       // Firebase Realtime Database'e kaydedilir
       DatabaseReference databaseReference =
-          FirebaseDatabase.instance.reference().child('videos');
-
+          FirebaseDatabase.instance.ref().child('videos');
+      String formattedDate = DateFormat('dd.MM.yyyy').format(now);
       databaseReference.push().set({
         'fileName': fileName,
         'fileURL': fileURL,
         'timestamp': ServerValue.timestamp,
+        'sure': '50',
+        'date': formattedDate,
       });
 
       print('Video uploaded to Firebase Storage and Database.');
+      const snackBar = SnackBar(
+        content: Text('Video veri tabanına yüklendi!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } catch (e) {
       print('Error uploading video: $e');
     }
