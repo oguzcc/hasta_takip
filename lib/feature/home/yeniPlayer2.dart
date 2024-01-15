@@ -1,10 +1,11 @@
 import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:video_player/video_player.dart';
 
 class YeniPlayer2 extends StatefulWidget {
@@ -23,26 +24,26 @@ class _YeniPlayer2State extends State<YeniPlayer2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firebase Storage Video Upload'),
+        title: const Text('Firebase Storage Video Upload'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _selectedVideo == null
-                ? Text('No video selected.')
+                ? const Text('No video selected.')
                 : VideoPlayerWidget(_selectedVideo!),
             ElevatedButton(
               onPressed: () async {
                 await _pickVideo();
               },
-              child: Text('Pick a Video'),
+              child: const Text('Pick a Video'),
             ),
             ElevatedButton(
               onPressed: () async {
                 await _uploadVideo();
               },
-              child: Text('Upload Video to Firebase Storage'),
+              child: const Text('Upload Video to Firebase Storage'),
             ),
           ],
         ),
@@ -106,7 +107,7 @@ class _YeniPlayer2State extends State<YeniPlayer2> {
 class VideoPlayerWidget extends StatelessWidget {
   final File videoFile;
 
-  VideoPlayerWidget(this.videoFile);
+  const VideoPlayerWidget(this.videoFile, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class VideoPlayerWidget extends StatelessWidget {
       return AspectRatio(
         aspectRatio: 16 / 9,
         child: Container(
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: OverflowBox(
@@ -130,7 +131,7 @@ class VideoPlayerWidget extends StatelessWidget {
       );
     } catch (e) {
       print('Error initializing VideoPlayer: $e');
-      return Text('Error playing video');
+      return const Text('Error playing video');
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:hasta_takip/feature/home/camera_page.dart';
-import 'package:hasta_takip/feature/home/home_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hasta_takip/router/screens.dart';
+import 'package:hasta_takip/ui_kit/style/gap.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Sara2 extends StatefulWidget {
@@ -62,6 +64,7 @@ class _Sara2State extends State<Sara2> {
 
   void resetTimer() {
     timer?.cancel();
+    player.stop();
     duration = countdownDuration;
   }
 
@@ -75,6 +78,14 @@ class _Sara2State extends State<Sara2> {
       player.stop();
       //_audioCache.play("alarm.mp3", volume: 0);
     });
+  }
+
+  @override
+  void dispose() {
+    player.stop();
+    player.dispose();
+    timer?.cancel();
+    super.dispose();
   }
 
   //Function used when accelerometer data indicates possibility of fall.
@@ -97,12 +108,7 @@ class _Sara2State extends State<Sara2> {
   }
 
   void makeNoise() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CameraPage(),
-      ),
-    );
+    context.pushNamed(Screens.cameraPage.name);
 
 /*    player.play(AssetSource('audio/alarm1.mp3'));
     player.setVolume(1);
@@ -113,41 +119,52 @@ class _Sara2State extends State<Sara2> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("sara"),
+          title: const Text("Sara"),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Visibility(
-                  child: const Text("Düşme Yok \n :)",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
-                  visible: !hasFallen),
-              Visibility(
-                child: const Text('Düşme var \n İyi misin?',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
-                visible: (hasFallen & !contactAuthorities),
+                visible: !hasFallen,
+                child: const Text(
+                  "Düşme Yok \n :)",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  textAlign: TextAlign.center,
+                ),
               ),
+              Visibility(
+                visible: (hasFallen & !contactAuthorities),
+                child: const Text(
+                  'Düşme var \n İyi misin?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Gap.verXXL,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Visibility(
-                      child: ElevatedButton(
-                          child: const Text("EVET",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 50)),
-                          onPressed: resetApp,
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.green),
-                              shadowColor: MaterialStateProperty.all<Color>(
-                                Colors.green.withOpacity(0.5),
-                              ),
-                              fixedSize: MaterialStateProperty.all<Size>(
-                                  const Size(200, 400)))),
-                      visible: (hasFallen & !contactAuthorities)),
+                      visible: (hasFallen & !contactAuthorities),
+                      child: SizedBox(
+                        width: 200,
+                        height: 100,
+                        child: ElevatedButton(
+                            onPressed: resetApp,
+                            // style: ButtonStyle(
+                            //     backgroundColor: MaterialStateProperty.all<Color>(
+                            //         Colors.green),
+                            //     shadowColor: MaterialStateProperty.all<Color>(
+                            //       Colors.green.withOpacity(0.5),
+                            //     ),
+                            //     fixedSize: MaterialStateProperty.all<Size>(
+                            //         const Size(200, 400))),
+                            child: const Text("EVET",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30))),
+                      )),
                   const SizedBox(
                     width: 9,
                   ),
@@ -169,57 +186,81 @@ class _Sara2State extends State<Sara2> {
                 ],
               ),
               Visibility(
+                  visible: (hasFallen & !contactAuthorities),
                   child: const Text(
                     'Yardım için iletişime geçiliyor...',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                  visible: (hasFallen & !contactAuthorities)),
+                    textAlign: TextAlign.center,
+                  )),
+              Gap.verLG,
               Visibility(
-                  child: buildTime(),
-                  visible: (hasFallen & !contactAuthorities)),
+                  visible: (hasFallen & !contactAuthorities),
+                  child: buildTime()),
               Visibility(
-                  child: const Text('Yardım Yolda',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-                  visible: contactAuthorities),
+                  visible: contactAuthorities,
+                  child: const Text(
+                    'İlk Yardım Telkinleri Başlatılıyor...',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    textAlign: TextAlign.center,
+                  )),
+              Gap.verLG,
               Visibility(
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Visibility(
-                      child: ElevatedButton(
-                          child: const Text("SES",
+                      visible: (contactAuthorities),
+                      child: SizedBox(
+                        width: 150,
+                        height: 100,
+                        child: ElevatedButton(
+                            onPressed: makeNoise,
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue),
+                                shadowColor: MaterialStateProperty.all<Color>(
+                                  Colors.green.withOpacity(0.5),
+                                ),
+                                fixedSize: MaterialStateProperty.all<Size>(
+                                    const Size(180, 400))),
+                            child: const Text(
+                              "Video Kaydet",
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 50)),
-                          onPressed: makeNoise,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20),
+                              textAlign: TextAlign.center,
+                            )),
+                      )),
+                  const SizedBox(width: 9),
+                  Visibility(
+                    visible: (contactAuthorities),
+                    child: SizedBox(
+                      width: 150,
+                      height: 100,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            resetApp();
+                            context.goNamed(Screens.home.name);
+                          },
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.blue),
+                                  MaterialStateProperty.all<Color>(Colors.red),
                               shadowColor: MaterialStateProperty.all<Color>(
-                                Colors.green.withOpacity(0.5),
-                              ),
+                                  Colors.red.withOpacity(0.5)),
                               fixedSize: MaterialStateProperty.all<Size>(
-                                  const Size(180, 400)))),
-                      visible: (contactAuthorities)),
-                  const SizedBox(
-                    width: 9,
-                  ),
-                  Visibility(
-                    child: ElevatedButton(
-                        child: const Text("İptal",
+                                  const Size(180, 400))),
+                          child: const Text(
+                            "İptal",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 50,
-                            )),
-                        onPressed: resetApp,
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.red),
-                            shadowColor: MaterialStateProperty.all<Color>(
-                                Colors.red.withOpacity(0.5)),
-                            fixedSize: MaterialStateProperty.all<Size>(
-                                const Size(180, 400)))),
-                    visible: (contactAuthorities),
+                              fontSize: 30,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
                   )
                 ],
               )),
@@ -227,31 +268,35 @@ class _Sara2State extends State<Sara2> {
           ),
         ),
         floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton(
-              heroTag: "+",
-              onPressed: () {
-                if (!contactAuthorities & !hasFallen) {
-                  fallTrigger();
-                } else {
-                  print("RESET APP REQUIRED");
-                }
-              },
-              tooltip: 'Düşme var',
-              child: const Icon(Icons.add),
-            ),
-            FloatingActionButton(
-              heroTag: "reset",
-              onPressed: resetApp,
-              tooltip: 'İptal',
-              child: const Icon(Icons.loop),
-            ),
-            FloatingActionButton(
+            Gap.horXXL,
+            // FloatingActionButton.large(
+            //   backgroundColor: Colors.grey[400],
+            //   heroTag: "+",
+            //   onPressed: () {
+            //     if (!contactAuthorities & !hasFallen) {
+            //       fallTrigger();
+            //     } else {
+            //       print("RESET APP REQUIRED");
+            //     }
+            //   },
+            //   tooltip: 'Düşme var',
+            //   child: const Icon(Icons.add),
+            // ),
+            // FloatingActionButton.large(
+            //   backgroundColor: Colors.grey[400],
+            //   heroTag: "reset",
+            //   onPressed: resetApp,
+            //   tooltip: 'İptal',
+            //   child: const Icon(Icons.loop),
+            // ),
+            FloatingActionButton.large(
+              backgroundColor: Colors.white,
               heroTag: "yeni",
               onPressed: tekrar,
               tooltip: 'yeni',
-              child: const Icon(Icons.access_time),
+              child: const Icon(Icons.home_filled),
             )
           ],
         )
@@ -264,11 +309,6 @@ class _Sara2State extends State<Sara2> {
   }
 
   void tekrar() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
+    context.goNamed(Screens.home.name);
   }
 }

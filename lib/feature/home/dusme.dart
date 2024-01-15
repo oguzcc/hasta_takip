@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:hasta_takip/feature/home/sara2.dart';
 import 'dart:math';
-import 'package:wakelock_plus/wakelock_plus.dart';
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hasta_takip/feature/home/sara2.dart';
+import 'package:hasta_takip/router/screens.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class Dusme extends StatefulWidget {
   const Dusme({Key? key}) : super(key: key);
@@ -18,9 +21,16 @@ class _DusmeState extends State<Dusme> {
   double vtoplamGyr = 0;
   double vector = 0.0;
 
+  Future<void> goToSara2() async {
+    await Future.delayed(const Duration(seconds: 2), () {
+      context.goNamed(Screens.sara2.name);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    goToSara2();
     // uyku moduna geçmesini engelliyor
     WakelockPlus.enable();
   }

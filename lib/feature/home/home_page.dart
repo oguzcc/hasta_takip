@@ -1,58 +1,126 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/core/util/extension/context_ext.dart';
 import 'package:hasta_takip/router/screens.dart';
 import 'package:hasta_takip/ui_kit/style/gap.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Query _databaseReference;
+
+  @override
+  void initState() {
+    super.initState();
+    _databaseReference = FirebaseDatabase.instance
+        .ref()
+        .child('videos')
+        .orderByChild('timestamp');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Icon(Icons.home, size: 50),
-        toolbarHeight: 100,
+        title: const Text('Video Listesi'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Hasta Adi'),
-            Text(
-              'GUNAYDIN',
-              style: context.textTheme.title1Medium,
-            ),
-            Gap.verLG,
-            const Text('Son Nobetiniz'),
-            Gap.verLG,
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Row(
+      body: StreamBuilder(
+        stream: _databaseReference.onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Hata: ${snapshot.error}');
+          } else {
+            // Verileri al ve ListView.builder ile listele
+            Map<dynamic, dynamic>? videos =
+                snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
+
+            List<Widget> videoWidgets = [];
+            videos?.forEach((key, video) {
+              videoWidgets.add(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _InfoCircle(label: '12/12/2023'),
-                    _InfoCircle(label: 'Kadikoy'),
-                    _InfoCircle(label: '5 dk'),
+                    _InfoCircle(
+                        label: IconButton(
+                            onPressed: () {
+                              context.pushNamed(
+                                  Screens.seizureRecordsVideo.name,
+                                  pathParameters: {'url': video['fileURL']});
+                            },
+                            icon: const Icon(Icons.play_circle_fill_outlined))),
+                    _InfoCircle(label: Text(video['sure'])),
+                    _InfoCircle(label: Text(video['date'])),
+                  ],
+                ),
+              );
+            });
+
+            return Scaffold(
+              appBar: AppBar(
+                title: const Icon(Icons.home, size: 50),
+                toolbarHeight: 100,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Hasta Adi'),
+                    Text(
+                      'GUNAYDIN',
+                      style: context.textTheme.title1Medium,
+                    ),
+                    Gap.verLG,
+                    const Text('Son Nobetiniz'),
+                    Gap.verLG,
+                    Card(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24.0),
+                          child: videoWidgets.first),
+                    ),
+                    Gap.verLG,
+                    Text(
+                      'Hatirlatmalar',
+                      style: context.textTheme.title1Medium,
+                    ),
+                    Gap.verLG,
+                    const Text('• Ilacinizi almayi unutmayin'),
+                    Gap.verLG,
+                    const Text('• Gunluk egzersiz yapmayi unutmayin'),
+                    Gap.verLG,
+                    const Text('• Yaklasan bir doktor randevunuz var'),
                   ],
                 ),
               ),
-            ),
-            Gap.verLG,
-            Text(
-              'Hatirlatmalar',
-              style: context.textTheme.title1Medium,
-            ),
-            Gap.verLG,
-            const Text('• Ilacinizi almayi unutmayin'),
-            Gap.verLG,
-            const Text('• Gunluk egzersiz yapmayi unutmayin'),
-            Gap.verLG,
-            const Text('• Yaklasan bir doktor randevunuz var'),
-          ],
-        ),
+              floatingActionButton: Stack(
+                children: [
+                  Positioned(
+                    right: 0,
+                    bottom: 80,
+                    child: FloatingActionButton.large(
+                      heroTag: '12312',
+                      backgroundColor: Colors.red,
+                      shape: const CircleBorder(),
+                      onPressed: () => context.pushNamed(Screens.dusme.name),
+                      // child: const Icon(
+                      //   Icons.arrow_downward,
+                      //   color: Colors.white,
+                      // ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -61,14 +129,14 @@ class HomePage extends StatelessWidget {
 class _InfoCircle extends StatelessWidget {
   const _InfoCircle({required this.label});
 
-  final String label;
+  final Widget label;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.black12,
       radius: 50,
-      child: Text(label),
+      child: label,
     );
   }
 }
