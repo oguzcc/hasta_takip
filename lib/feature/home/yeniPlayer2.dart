@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,6 +50,12 @@ class YeniPlayer2State extends State<YeniPlayer2> {
               },
               child: const Text('veri tabanına video yükleyiniz.'),
             ),
+            ElevatedButton(
+              onPressed: () async {
+                _sendSMS();
+              },
+              child: const Text('KAYITLI KİŞİYE SMS AT'),
+            ),
           ],
         ),
       ),
@@ -86,12 +90,13 @@ class YeniPlayer2State extends State<YeniPlayer2> {
   void _sendSMS() async {
     List<String> recipents = [phoneNumber];
 
-    String _result = await sendSMS(message: message, recipients: recipents)
+    String result = await sendSMS(message: message, recipients: recipents)
+        // ignore: body_might_complete_normally_catch_error
         .catchError((onError) {
       debugPrint(onError);
     });
 
-    debugPrint(_result);
+    debugPrint(result);
   }
 
   Future<void> _uploadVideo() async {

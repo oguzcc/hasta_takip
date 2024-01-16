@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'timer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/feature/home/sara2.dart';
@@ -15,23 +14,22 @@ class Dusme extends StatefulWidget {
 }
 
 class _DusmeState extends State<Dusme> {
-  final TimerController timerController = TimerController();
   double posX = 180, posY = 350, posZ = 350;
   double posaccX = 180, posaccY = 350, posaccZ = 350;
   double vtoplamAcc = 0;
   double vtoplamGyr = 0;
   double vector = 0.0;
 
-  Future<void> goToSara2() async {
-    await Future.delayed(const Duration(seconds: 2), () {
+/*   Future<void> goToSara2() async {
+    await Future.delayed(const Duration(seconds: 1), () {
       context.goNamed(Screens.sara2.name);
     });
-  }
+  } */
 
   @override
   void initState() {
     super.initState();
-    goToSara2();
+    //goToSara2();
     // uyku moduna geçmesini engelliyor
     WakelockPlus.enable();
   }
@@ -66,16 +64,15 @@ class _DusmeState extends State<Dusme> {
 
                   if (vector > 3.5 && vector < 5) {
                     if (vtoplamGyr > 3) {
-                      timerController.start();
                       WidgetsBinding.instance.addPostFrameCallback(
-                        (_) => Navigator.pushReplacement(
+                        (_) => Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const Sara2(),
                           ),
                         ),
                       );
-                    }
+                    } //context.goNamed(Screens.sara2.name);
                   }
                 }
                 return Text(

@@ -1186,14 +1186,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  sms_advanced:
-    dependency: "direct main"
-    description:
-      name: sms_advanced
-      sha256: "9d9ae78a6b692758ede569798f60afe6dc907fd25b03d54d290585a9f2fbf148"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   source_gen:
     dependency: transitive
     description:
