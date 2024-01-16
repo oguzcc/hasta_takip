@@ -53,14 +53,14 @@ class BottomNavbarScaffold extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               BottomNavBarItem(
-                title: 'Home',
+                title: 'Ana Sayfa',
                 icon: Icons.home,
                 onTap: () => _onTap(context, 0),
                 navigationShell: navigationShell,
                 currentIndex: 0,
               ),
               BottomNavBarItem(
-                title: 'Reminder',
+                title: 'Hatırlatıcı',
                 icon: Icons.notifications,
                 onTap: () => _onTap(context, 1),
                 navigationShell: navigationShell,
@@ -68,14 +68,14 @@ class BottomNavbarScaffold extends StatelessWidget {
               ),
               const SizedBox(width: 30),
               BottomNavBarItem(
-                title: 'Social',
+                title: 'Sosyal Ağ',
                 icon: Icons.people,
                 onTap: () => _onTap(context, 3),
                 navigationShell: navigationShell,
                 currentIndex: 3,
               ),
               BottomNavBarItem(
-                title: 'User',
+                title: 'Profil',
                 icon: Icons.person,
                 onTap: () => _onTap(context, 4),
                 navigationShell: navigationShell,

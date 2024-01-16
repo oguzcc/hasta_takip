@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         stream: _databaseReference.onValue,
         builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Hata: ${snapshot.error}');
           } else {
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Hasta Adi'),
+                    const Text('Epilepsi Hastasi 1'),
                     Text(
                       'GUNAYDIN',
                       style: context.textTheme.title1Medium,
@@ -86,17 +86,6 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.symmetric(vertical: 24.0),
                           child: videoWidgets.first),
                     ),
-                    Gap.verLG,
-                    Text(
-                      'Hatirlatmalar',
-                      style: context.textTheme.title1Medium,
-                    ),
-                    Gap.verLG,
-                    const Text('• Ilacinizi almayi unutmayin'),
-                    Gap.verLG,
-                    const Text('• Gunluk egzersiz yapmayi unutmayin'),
-                    Gap.verLG,
-                    const Text('• Yaklasan bir doktor randevunuz var'),
                   ],
                 ),
               ),

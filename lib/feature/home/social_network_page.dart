@@ -10,7 +10,7 @@ class SocialNetworkPage extends StatelessWidget {
         title: const Icon(Icons.people, size: 50),
         toolbarHeight: 100,
       ),
-      body: const Center(child: Text('Social Network Page')),
+      body: const Center(child: Text('Sosyal Ag')),
     );
   }
 }
