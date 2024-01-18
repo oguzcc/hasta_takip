@@ -19,6 +19,7 @@ class _DusmeState extends State<Dusme> {
   double vtoplamAcc = 0;
   double vtoplamGyr = 0;
   double vector = 0.0;
+  bool bir = true;
 
 /*   Future<void> goToSara2() async {
     await Future.delayed(const Duration(seconds: 1), () {
@@ -31,6 +32,7 @@ class _DusmeState extends State<Dusme> {
     super.initState();
     //goToSara2();
     // uyku moduna geçmesini engelliyor
+    bir = true;
     WakelockPlus.enable();
   }
 
@@ -61,18 +63,20 @@ class _DusmeState extends State<Dusme> {
                   vtoplamGyr = sqrt(pow(posX, 2) + pow(posY, 2) + pow(posZ, 2));
                   vtoplamGyr = double.tryParse(vtoplamGyr.toStringAsFixed(2))!;
                   ///////////////////
-
-                  if (vector > 3.5 && vector < 5) {
-                    if (vtoplamGyr > 3) {
-                      WidgetsBinding.instance.addPostFrameCallback(
-                        (_) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Sara2(),
+                  if (bir) {
+                    if (vector > 3.5 && vector < 8) {
+                      if (vtoplamGyr > 5) {
+                        bir = false;
+                        WidgetsBinding.instance.addPostFrameCallback(
+                          (_) => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Sara2(),
+                            ),
                           ),
-                        ),
-                      );
-                    } //context.goNamed(Screens.sara2.name);
+                        );
+                      } //context.goNamed(Screens.sara2.name);
+                    }
                   }
                 }
                 return Text(

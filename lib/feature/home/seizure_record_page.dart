@@ -93,7 +93,7 @@ class _SeizureRecordPageState extends State<SeizureRecordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Video Listesi'),
+        title: const Text('Kayıtlı Nöbetler'),
       ),
       body: StreamBuilder(
         stream: _databaseReference.onValue,

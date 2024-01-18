@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Video Listesi'),
+        title: const Text('Ana Ekran'),
       ),
       body: StreamBuilder(
         stream: _databaseReference.onValue,
@@ -85,6 +85,22 @@ class _HomePageState extends State<HomePage> {
                       child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24.0),
                           child: videoWidgets.first),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Gap.verLG,
+                        Text(
+                          'Hatırlatmalar',
+                          style: context.textTheme.title1Medium,
+                        ),
+                        Gap.verLG,
+                        const Text('• Ilacinizi almayi unutmayin'),
+                        Gap.verLG,
+                        const Text('• Gunluk egzersiz yapmayi unutmayin'),
+                        Gap.verLG,
+                        const Text('• Yaklasan bir doktor randevunuz var'),
+                      ],
                     ),
                   ],
                 ),

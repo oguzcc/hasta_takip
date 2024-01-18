@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:hasta_takip/ui_kit/style/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -22,8 +23,9 @@ class YeniPlayer2State extends State<YeniPlayer2> {
   final picker = ImagePicker();
   DateTime now = DateTime.now();
   late VideoPlayerController _videoPlayerController;
-  final String phoneNumber = "00905415436786"; // Hedef telefon numarası
-  final String message = "Merhaba, bu bir test SMS'dir."; // Gönderilecek mesaj
+  final String phoneNumber = "00905414706161"; // Hedef telefon numarası
+  final String message =
+      "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=41.0391755,28.9996919"; // Gönderilecek mesaj
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +46,14 @@ class YeniPlayer2State extends State<YeniPlayer2> {
               },
               child: const Text('Video seçiniz'),
             ),
+            Gap.verLG,
             ElevatedButton(
               onPressed: () async {
                 await _uploadVideo();
               },
               child: const Text('veri tabanına video yükleyiniz.'),
             ),
+            Gap.verLG,
             ElevatedButton(
               onPressed: () async {
                 _sendSMS();
