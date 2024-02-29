@@ -9,32 +9,36 @@ class PatientInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Icon(Icons.person, size: 50),
-        toolbarHeight: 100,
+        title: const Icon(Icons.person, size: 40),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _PatientInfoTile('Adi Soyadi: Epilepsi Hastasi 1'),
-            Gap.verSM,
-            const _PatientInfoTile('Cinsiyet: Erkek'),
-            Gap.verSM,
-            const _PatientInfoTile('Dogum Tarihi: 01.01.1990'),
-            Gap.verSM,
-            const _PatientInfoTile('Boy / Kilo: 180 / 80'),
-            Gap.verSM,
-            const _PatientInfoTile('Kan Grubu: A+'),
-            Gap.verSM,
-            const _PatientInfoTile('E posta: epilepsihasta1@gmail.com'),
-            Gap.verSM,
-            const _PatientInfoTile('Telefon: 0555 555 55 55'),
-            Gap.verSM,
-            const _PatientInfoTile('Tibbi Gecmisi: Epilepsi'),
-            Gap.verSM,
-            const _PatientInfoTile('Ilaclar: Depakin, Lamictal'),
-          ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const _PatientInfoTile('Adi Soyadi: Epilepsi Hastasi 1'),
+                Gap.verSM,
+                const _PatientInfoTile('Cinsiyet: Erkek'),
+                Gap.verSM,
+                const _PatientInfoTile('Dogum Tarihi: 01.01.1990'),
+                Gap.verSM,
+                const _PatientInfoTile('Boy / Kilo: 180 / 80'),
+                Gap.verSM,
+                const _PatientInfoTile('Kan Grubu: A+'),
+                Gap.verSM,
+                const _PatientInfoTile('E posta: epilepsihasta1@gmail.com'),
+                Gap.verSM,
+                const _PatientInfoTile('Telefon: 0555 555 55 55'),
+                Gap.verSM,
+                const _PatientInfoTile('Tibbi Gecmisi: Epilepsi'),
+                Gap.verSM,
+                const _PatientInfoTile('Ilaclar: Depakin, Lamictal'),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -48,6 +52,10 @@ class _PatientInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title, style: context.textTheme.headlineMedium);
+    return Card(
+        child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(title, style: context.textTheme.headlineMedium),
+    ));
   }
 }

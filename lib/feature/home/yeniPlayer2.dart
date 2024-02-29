@@ -1,14 +1,15 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:hasta_takip/ui_kit/style/gap.dart';
-import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
 class YeniPlayer2 extends StatefulWidget {
   final String filePath;
@@ -125,8 +126,19 @@ class YeniPlayer2State extends State<YeniPlayer2> {
       // Firebase Realtime Database'e kaydedilir
       DatabaseReference databaseReference =
           FirebaseDatabase.instance.ref().child('videos');
+      DatabaseReference databaseReference2 =
+          FirebaseDatabase.instance.ref().child('lastVideo');
+
       String formattedDate = DateFormat('dd.MM.yyyy').format(now);
       databaseReference.push().set({
+        'fileName': fileName,
+        'fileURL': fileURL,
+        'timestamp': ServerValue.timestamp,
+        'sure': '50',
+        'date': formattedDate,
+      });
+
+      databaseReference2.update({
         'fileName': fileName,
         'fileURL': fileURL,
         'timestamp': ServerValue.timestamp,

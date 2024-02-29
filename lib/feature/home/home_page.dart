@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/core/util/extension/context_ext.dart';
 import 'package:hasta_takip/router/screens.dart';
+import 'package:hasta_takip/router/show.dart';
 import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,22 +17,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Query _databaseReference;
+  late SharedPreferences prefs;
+  int remindersLength = 0;
+  List<String> reminders = [];
+
+  Future<void> init() async {
+    await ReminderNotifier().init();
+  }
 
   @override
   void initState() {
+    init();
     super.initState();
-    _databaseReference = FirebaseDatabase.instance
-        .ref()
-        .child('videos')
-        .orderByChild('timestamp');
+    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ana Ekran'),
-      ),
       body: StreamBuilder(
         stream: _databaseReference.onValue,
         builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
@@ -57,7 +62,9 @@ class _HomePageState extends State<HomePage> {
                             },
                             icon: const Icon(Icons.play_circle_fill_outlined))),
                     _InfoCircle(label: Text(video['sure'])),
-                    _InfoCircle(label: Text(video['date'])),
+                    _InfoCircle(
+                        label: Text(
+                            DateFormat('dd/MM/yyyy').format(DateTime.now()))),
                   ],
                 ),
               );
@@ -65,45 +72,94 @@ class _HomePageState extends State<HomePage> {
 
             return Scaffold(
               appBar: AppBar(
-                title: const Icon(Icons.home, size: 50),
-                toolbarHeight: 100,
+                title: const Icon(Icons.home, size: 40),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      Show.dialog(
+                        context,
+                        AlertDialog(
+                          title: const Text('Uyarı'),
+                          content: const Text('Tüm hatırlatmalar silinecek.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              child: const Text('Hayır'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ReminderNotifier().deleteAll();
+                                context.pop();
+                                setState(() {});
+                              },
+                              child: const Text('Evet'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.delete_forever_outlined,
+                        size: 32, color: Colors.red),
+                  ),
+                ],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Epilepsi Hastasi 1'),
-                    Text(
-                      'GUNAYDIN',
-                      style: context.textTheme.title1Medium,
-                    ),
-                    Gap.verLG,
-                    const Text('Son Nobetiniz'),
-                    Gap.verLG,
-                    Card(
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24.0),
-                          child: videoWidgets.first),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Gap.verLG,
-                        Text(
-                          'Hatırlatmalar',
-                          style: context.textTheme.title1Medium,
-                        ),
-                        Gap.verLG,
-                        const Text('• Ilacinizi almayi unutmayin'),
-                        Gap.verLG,
-                        const Text('• Gunluk egzersiz yapmayi unutmayin'),
-                        Gap.verLG,
-                        const Text('• Yaklasan bir doktor randevunuz var'),
-                      ],
-                    ),
-                  ],
-                ),
+                child: ListenableBuilder(
+                    listenable: ReminderNotifier(),
+                    builder: (context, child) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Epilepsi Hastasi 1'),
+                          Text(
+                            'GUNAYDIN',
+                            style: context.textTheme.title1Medium,
+                          ),
+                          Gap.verXS,
+                          const Text('Son Nobetiniz'),
+                          Gap.verXS,
+                          Text('Nöbet Sıklığı: ${ReminderNotifier().freq}'),
+                          Gap.verXS,
+                          Card(
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24.0),
+                                child: videoWidgets.first),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: SafeArea(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Gap.verLG,
+                                    Text(
+                                      'Hatırlatmalar',
+                                      style: context.textTheme.title1Medium,
+                                    ),
+                                    ...ReminderNotifier()
+                                        .reminders
+                                        .map((e) => Column(
+                                              children: [
+                                                Gap.verXS,
+                                                Text(
+                                                  '• $e',
+                                                  style: context.text.bodyLarge,
+                                                ),
+                                              ],
+                                            ))
+                                        .toList(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
               ),
               floatingActionButton: Stack(
                 children: [
@@ -204,5 +260,68 @@ class _DrawerTile extends StatelessWidget {
       title: Text(title),
       onTap: onTap,
     );
+  }
+}
+
+class ReminderNotifier extends ChangeNotifier {
+  // Singleton
+  static final ReminderNotifier _instance = ReminderNotifier._internal();
+  factory ReminderNotifier() => _instance;
+  ReminderNotifier._internal();
+
+  late SharedPreferences prefs;
+  int remindersLength = 0;
+  List<String> reminders = [];
+  List<String> chat = [];
+  String freq = '';
+
+  Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
+    reminders = prefs.getStringList('reminders') ?? [];
+    freq = prefs.getString('freq') ?? '';
+    chat = prefs.getStringList('chat') ?? [];
+    notifyListeners();
+  }
+
+  void setFreq(String freq) {
+    this.freq = freq;
+    prefs.setString('freq', freq);
+    notifyListeners();
+  }
+
+  void addReminder(String reminder) {
+    reminders.add(reminder);
+    prefs.setStringList('reminders', reminders);
+    notifyListeners();
+  }
+
+  void deleteReminder(String reminder) {
+    reminders.remove(reminder);
+    prefs.setStringList('reminders', reminders);
+    notifyListeners();
+  }
+
+  void addMessage(String message) {
+    chat.add(message);
+    prefs.setStringList('chat', chat);
+    notifyListeners();
+  }
+
+  void deleteMessage(String message) {
+    chat.remove(message);
+    prefs.setStringList('chat', chat);
+    notifyListeners();
+  }
+
+  void deleteChat() {
+    chat.clear();
+    notifyListeners();
+  }
+
+  void deleteAll() {
+    reminders.clear();
+    freq = '';
+    prefs.clear();
+    notifyListeners();
   }
 }

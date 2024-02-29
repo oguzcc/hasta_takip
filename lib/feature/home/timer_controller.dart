@@ -7,7 +7,7 @@ class TimerController {
   bool get isRunning => _timer.isActive;
 
   void start() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _elapsedSeconds++;
     });
   }

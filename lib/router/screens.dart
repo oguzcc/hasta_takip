@@ -8,6 +8,7 @@ enum Screens {
   patientInfo('/patientInfo', 'PatientInfo'),
   reminders('/reminders', 'Reminders'),
   socialNetwork('/socialNetwork', 'SocialNetwork'),
+  chat('chat', 'Chat'),
 
   seizureRecords('/seizuerRecords', 'SeizuerRecords'),
   seizureRecordsVideo('seizuerRecordsVideo', 'SeizuerRecordsVideo'),

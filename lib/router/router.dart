@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/feature/auth/presentation/view/onboarding_page.dart';
 import 'package:hasta_takip/feature/auth/presentation/view/splash_page.dart';
 import 'package:hasta_takip/feature/home/camera_page.dart';
+import 'package:hasta_takip/feature/home/chat_page.dart';
 import 'package:hasta_takip/feature/home/dusme.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/feature/home/patient_info.dart';
@@ -15,6 +16,7 @@ import 'package:hasta_takip/feature/home/seizure_record_video_page.dart';
 import 'package:hasta_takip/feature/home/social_network_page.dart';
 import 'package:hasta_takip/feature/home/yeniPlayer2.dart';
 import 'package:hasta_takip/ui_kit/layout/bottom_navbar_scaffold.dart';
+
 import 'screens.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -46,7 +48,7 @@ final goRouter = GoRouter(
       pageBuilder: (context, state) => const NoTransitionPage(
         child: SplashPage(),
       ),
-      redirect: (context, state) => Screens.onboarding.path,
+      redirect: (context, state) => Screens.home.path,
     ),
     GoRoute(
       path: Screens.onboarding.path,
@@ -136,12 +138,19 @@ final goRouter = GoRouter(
           navigatorKey: socialNetwork,
           routes: [
             GoRoute(
-              parentNavigatorKey: socialNetwork,
-              path: Screens.socialNetwork.path,
-              name: Screens.socialNetwork.name,
-              pageBuilder: (context, state) =>
-                  const NoTransitionPage(child: SocialNetworkPage()),
-            ),
+                parentNavigatorKey: socialNetwork,
+                path: Screens.socialNetwork.path,
+                name: Screens.socialNetwork.name,
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: SocialNetworkPage()),
+                routes: [
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: Screens.chat.path,
+                    name: Screens.chat.name,
+                    builder: (context, state) => const ChatPage(),
+                  ),
+                ]),
           ],
         ),
         StatefulShellBranch(

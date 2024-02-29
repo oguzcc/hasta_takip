@@ -93,10 +93,12 @@ class Input extends StatelessWidget {
 
   factory Input.voucher({
     required TextEditingController controller,
+    required String hint,
   }) =>
       Input._(
         input: _InputVoucher(
           controller: controller,
+          hint: hint,
         ),
       );
 

@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-enum HiveKeys { box, user }
+enum HiveKeys { box, user, reminder }
 
 class HiveClient {
   HiveClient(this._box);

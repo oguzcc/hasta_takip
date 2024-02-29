@@ -1,8 +1,7 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/feature/home/sara2.dart';
-import 'package:hasta_takip/router/screens.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 

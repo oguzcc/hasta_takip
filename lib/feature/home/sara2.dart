@@ -105,6 +105,7 @@ class _Sara2State extends State<Sara2> {
       isCountDown = false;
       hasFallen = true;
       resetTimer();
+      
     });
   }
 

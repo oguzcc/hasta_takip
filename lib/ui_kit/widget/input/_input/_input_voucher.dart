@@ -1,11 +1,12 @@
 part of '../input.dart';
 
 class _InputVoucher extends StatelessWidget {
-  const _InputVoucher({
-    required TextEditingController controller,
-  }) : _controller = controller;
+  const _InputVoucher(
+      {required TextEditingController controller, required this.hint})
+      : _controller = controller;
 
   final TextEditingController _controller;
+  final String hint;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,8 @@ class _InputVoucher extends StatelessWidget {
       children: [
         _Input(
           controller: _controller,
-          decoration: const InputDecoration(
-            hintText: 'Voucher',
+          decoration: InputDecoration(
+            hintText: hint,
           ),
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
