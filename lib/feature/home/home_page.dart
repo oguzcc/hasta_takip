@@ -105,61 +105,71 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListenableBuilder(
-                    listenable: ReminderNotifier(),
-                    builder: (context, child) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Epilepsi Hastasi 1'),
-                          Text(
-                            'GUNAYDIN',
-                            style: context.textTheme.title1Medium,
-                          ),
-                          Gap.verXS,
-                          const Text('Son Nobetiniz'),
-                          Gap.verXS,
-                          Text('Nöbet Sıklığı: ${ReminderNotifier().freq}'),
-                          Gap.verXS,
-                          Card(
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 24.0),
-                                child: videoWidgets.first),
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: SafeArea(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Gap.verLG,
-                                    Text(
-                                      'Hatırlatmalar',
-                                      style: context.textTheme.title1Medium,
-                                    ),
-                                    ...ReminderNotifier()
-                                        .reminders
-                                        .map((e) => Column(
-                                              children: [
-                                                Gap.verXS,
-                                                Text(
-                                                  '• $e',
-                                                  style: context.text.bodyLarge,
-                                                ),
-                                              ],
-                                            ))
-                                        .toList(),
-                                  ],
+              body: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/image/bg_light.jpeg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListenableBuilder(
+                      listenable: ReminderNotifier(),
+                      builder: (context, child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Epilepsi Hastasi 1'),
+                            Text(
+                              'GUNAYDIN',
+                              style: context.textTheme.title1Medium,
+                            ),
+                            Gap.verXS,
+                            const Text('Son Nobetiniz'),
+                            Gap.verXS,
+                            Text('Nöbet Sıklığı: ${ReminderNotifier().freq}'),
+                            Gap.verXS,
+                            Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 24.0),
+                                  child: videoWidgets.first),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: SafeArea(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Gap.verLG,
+                                      Text(
+                                        'Hatırlatmalar',
+                                        style: context.textTheme.title1Medium,
+                                      ),
+                                      ...ReminderNotifier()
+                                          .reminders
+                                          .map((e) => Column(
+                                                children: [
+                                                  Gap.verXS,
+                                                  Text(
+                                                    '• $e',
+                                                    style:
+                                                        context.text.bodyLarge,
+                                                  ),
+                                                ],
+                                              ))
+                                          .toList(),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    }),
+                          ],
+                        );
+                      }),
+                ),
               ),
               floatingActionButton: Stack(
                 children: [
