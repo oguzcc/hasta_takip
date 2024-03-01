@@ -9,6 +9,8 @@ enum Screens {
   reminders('/reminders', 'Reminders'),
   socialNetwork('/socialNetwork', 'SocialNetwork'),
   chat('chat', 'Chat'),
+  faq('faq', 'Faq'),
+  aboutUs('aboutUs', 'AboutUs'),
 
   seizureRecords('/seizuerRecords', 'SeizuerRecords'),
   seizureRecordsVideo('seizuerRecordsVideo', 'SeizuerRecordsVideo'),

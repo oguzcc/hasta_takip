@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/router/show.dart';
+import 'package:hasta_takip/ui_kit/style/gap.dart';
 import 'package:hasta_takip/ui_kit/widget/button/button.dart';
 import 'package:hasta_takip/ui_kit/widget/input/input.dart';
 
@@ -104,6 +105,7 @@ class _ChatPageState extends State<ChatPage> {
                           child: Input.voucher(
                               controller: controller,
                               hint: 'Mesajınızı yazın')),
+                      Gap.horXS,
                       Button.filled(
                           onPressed: () {
                             ReminderNotifier().addMessage(controller.text);

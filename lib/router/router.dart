@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/feature/auth/presentation/view/onboarding_page.dart';
 import 'package:hasta_takip/feature/auth/presentation/view/splash_page.dart';
+import 'package:hasta_takip/feature/home/about.page.dart';
 import 'package:hasta_takip/feature/home/camera_page.dart';
 import 'package:hasta_takip/feature/home/chat_page.dart';
 import 'package:hasta_takip/feature/home/dusme.dart';
+import 'package:hasta_takip/feature/home/freq_asked_quest%C4%B1ons.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/feature/home/patient_info.dart';
 import 'package:hasta_takip/feature/home/reminder_page.dart';
@@ -138,12 +140,36 @@ final goRouter = GoRouter(
           navigatorKey: socialNetwork,
           routes: [
             GoRoute(
-                parentNavigatorKey: socialNetwork,
-                path: Screens.socialNetwork.path,
-                name: Screens.socialNetwork.name,
+              parentNavigatorKey: socialNetwork,
+              path: Screens.socialNetwork.path,
+              name: Screens.socialNetwork.name,
+              pageBuilder: (context, state) =>
+                  const NoTransitionPage(child: SocialNetworkPage()),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: patientInfo,
+          routes: [
+            GoRoute(
+                parentNavigatorKey: patientInfo,
+                path: Screens.patientInfo.path,
+                name: Screens.patientInfo.name,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: SocialNetworkPage()),
+                    const NoTransitionPage(child: ProfilePage()),
                 routes: [
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: Screens.faq.path,
+                    name: Screens.faq.name,
+                    builder: (context, state) => const FaqPage(),
+                  ),
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: Screens.aboutUs.path,
+                    name: Screens.aboutUs.name,
+                    builder: (context, state) => const AboutPage(),
+                  ),
                   GoRoute(
                     parentNavigatorKey: rootNavigatorKey,
                     path: Screens.chat.path,
@@ -151,18 +177,6 @@ final goRouter = GoRouter(
                     builder: (context, state) => const ChatPage(),
                   ),
                 ]),
-          ],
-        ),
-        StatefulShellBranch(
-          navigatorKey: patientInfo,
-          routes: [
-            GoRoute(
-              parentNavigatorKey: patientInfo,
-              path: Screens.patientInfo.path,
-              name: Screens.patientInfo.name,
-              pageBuilder: (context, state) =>
-                  const NoTransitionPage(child: PatientInfo()),
-            ),
           ],
         ),
       ],

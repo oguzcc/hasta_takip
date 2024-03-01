@@ -5,8 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hasta_takip/router/screens.dart';
 import 'package:hasta_takip/ui_kit/style/app_padding.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -106,14 +104,6 @@ class SocialNetworkPageState extends State<SocialNetworkPage> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Epilepsi Blog'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.message_outlined),
-              onPressed: () {
-                context.pushNamed(Screens.chat.name);
-              },
-            ),
-          ],
         ),
         body: Center(child: Builder(
           builder: (BuildContext context) {

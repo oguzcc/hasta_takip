@@ -60,7 +60,8 @@ class _HomePageState extends State<HomePage> {
                                   Screens.seizureRecordsVideo.name,
                                   pathParameters: {'url': video['fileURL']});
                             },
-                            icon: const Icon(Icons.play_circle_fill_outlined))),
+                            icon: const Icon(Icons.play_circle_fill_outlined,
+                                size: 40))),
                     _InfoCircle(label: Text(video['sure'])),
                     _InfoCircle(
                         label: Text(
@@ -131,6 +132,8 @@ class _HomePageState extends State<HomePage> {
                             Text('Nöbet Sıklığı: ${ReminderNotifier().freq}'),
                             Gap.verXS,
                             Card(
+                              color: Colors.transparent,
+                              elevation: 0,
                               child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 24.0),
@@ -205,7 +208,7 @@ class _InfoCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundColor: Colors.black12,
+      backgroundColor: Colors.white70,
       radius: 50,
       child: label,
     );
