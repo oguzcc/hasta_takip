@@ -11,6 +11,7 @@ import 'package:hasta_takip/feature/home/dusme.dart';
 import 'package:hasta_takip/feature/home/freq_asked_quest%C4%B1ons.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/feature/home/patient_info.dart';
+import 'package:hasta_takip/feature/home/patient_info_2.dart';
 import 'package:hasta_takip/feature/home/reminder_page.dart';
 import 'package:hasta_takip/feature/home/sara2.dart';
 import 'package:hasta_takip/feature/home/seizure_record_page.dart';
@@ -175,6 +176,12 @@ final goRouter = GoRouter(
                     path: Screens.chat.path,
                     name: Screens.chat.name,
                     builder: (context, state) => const ChatPage(),
+                  ),
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: Screens.patientInfo2.path,
+                    name: Screens.patientInfo2.name,
+                    builder: (context, state) => const PatientInfo(),
                   ),
                 ]),
           ],

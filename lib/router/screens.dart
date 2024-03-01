@@ -6,6 +6,7 @@ enum Screens {
   //home
   home('/home', 'Home'),
   patientInfo('/patientInfo', 'PatientInfo'),
+  patientInfo2('patientInfo2', 'PatientInfo2'),
   reminders('/reminders', 'Reminders'),
   socialNetwork('/socialNetwork', 'SocialNetwork'),
   chat('chat', 'Chat'),
