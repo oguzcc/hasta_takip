@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     init();
     super.initState();
-    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
+    _databaseReference = FirebaseDatabase.instance.ref().child('videos');
   }
 
   @override
@@ -64,8 +64,9 @@ class _HomePageState extends State<HomePage> {
                                 size: 40))),
                     _InfoCircle(label: Text(video['sure'])),
                     _InfoCircle(
-                        label: Text(
-                            DateFormat('dd/MM/yyyy').format(DateTime.now()))),
+                        label:
+                            //DateFormat('dd/MM/yyyy').format(DateTime.now()))),
+                            Text(video['date'])),
                   ],
                 ),
               );
