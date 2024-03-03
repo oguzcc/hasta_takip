@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   late SharedPreferences prefs;
   int remindersLength = 0;
   List<String> reminders = [];
+  final player = AudioPlayer();
 
   Future<void> init() async {
     await ReminderNotifier().init();
@@ -48,6 +50,9 @@ class _HomePageState extends State<HomePage> {
 
             List<Widget> videoWidgets = [];
             videos?.forEach((key, video) {
+              if (video['AlarmOn']) {
+                player.play(AssetSource('audio/alarm1.mp3'));
+              }
               videoWidgets.add(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,6 +106,13 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: const Icon(Icons.delete_forever_outlined,
                         size: 32, color: Colors.red),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      player.stop();
+                      // player.dispose();
+                    },
+                    icon: const Icon(Icons.stop, size: 32, color: Colors.red),
                   ),
                 ],
               ),
@@ -176,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Positioned(
                     right: 0,
-                    bottom: 80,
+                    bottom: 90,
                     child: FloatingActionButton.large(
                       heroTag: '12312',
                       backgroundColor: Colors.red,
