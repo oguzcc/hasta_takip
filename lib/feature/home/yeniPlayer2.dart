@@ -146,7 +146,7 @@ class YeniPlayer2State extends State<YeniPlayer2> {
       DatabaseReference databaseReference =
           FirebaseDatabase.instance.ref().child('videos');
       DatabaseReference databaseReference2 =
-          FirebaseDatabase.instance.ref().child('lastVideo');
+          FirebaseDatabase.instance.ref().child('lastVideo').child('son');
 
       String formattedDate = DateFormat('dd.MM.yyyy').format(now);
       databaseReference.push().set({

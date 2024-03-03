@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     init();
     super.initState();
-    _databaseReference = FirebaseDatabase.instance.ref().child('videos');
+    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
   }
 
   @override
@@ -62,10 +62,8 @@ class _HomePageState extends State<HomePage> {
                             icon: const Icon(Icons.play_circle_fill_outlined,
                                 size: 40))),
                     _InfoCircle(label: Text(video['sure'])),
-                    _InfoCircle(
-                        label:
-                            //DateFormat('dd/MM/yyyy').format(DateTime.now()))),
-                            Text(video['date'])),
+                    _InfoCircle(label: Text(video['date'])),
+                    //DateFormat('dd/MM/yyyy').format(DateTime.now()))),
                   ],
                 ),
               );
