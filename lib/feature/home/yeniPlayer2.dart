@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:hasta_takip/ui_kit/widget/indicator/loading_indicator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
@@ -28,6 +29,13 @@ class YeniPlayer2State extends State<YeniPlayer2> {
   final String message =
       "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=41.0391755,28.9996919"; // Gönderilecek mesaj
 
+  bool isLoading = false;
+  void changeLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,34 +43,45 @@ class YeniPlayer2State extends State<YeniPlayer2> {
         title: const Text('video seçiniz ve sms gönderiniz.'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _selectedVideo == null
-                ? const Text('video seçilmedi')
-                : VideoPlayerWidget(_selectedVideo!),
-            ElevatedButton(
-              onPressed: () async {
-                await _pickVideo();
-              },
-              child: const Text('Video seçiniz'),
-            ),
-            Gap.verLG,
-            ElevatedButton(
-              onPressed: () async {
-                await _uploadVideo();
-              },
-              child: const Text('veri tabanına video yükleyiniz.'),
-            ),
-            Gap.verLG,
-            ElevatedButton(
-              onPressed: () async {
-                _sendSMS();
-              },
-              child: const Text('KAYITLI KİŞİYE SMS AT'),
-            ),
-          ],
-        ),
+        child: isLoading
+            ? const LoadingIndicator.center()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _selectedVideo == null
+                      ? const Text('video seçilmedi')
+                      : VideoPlayerWidget(_selectedVideo!),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _pickVideo();
+                      changeLoading();
+                      await _uploadVideo();
+                      changeLoading();
+                    },
+                    child: const Text('Video seçiniz'),
+                  ),
+                  // Gap.verLG,
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     setState(() {
+                  //       isLoading = true;
+                  //     });
+                  //     await _uploadVideo();
+                  //     setState(() {
+                  //       isLoading = false;
+                  //     });
+                  //   },
+                  //   child: const Text('veri tabanına video yükleyiniz.'),
+                  // ),
+                  Gap.verLG,
+                  ElevatedButton(
+                    onPressed: () async {
+                      _sendSMS();
+                    },
+                    child: const Text('KAYITLI KİŞİYE SMS AT'),
+                  ),
+                ],
+              ),
       ),
     );
   }
@@ -79,7 +98,7 @@ class YeniPlayer2State extends State<YeniPlayer2> {
           _selectedVideo = file;
         });
         _videoPlayerController = VideoPlayerController.file(_selectedVideo!);
-        await _videoPlayerController.play();
+        _videoPlayerController.play();
       }
     } catch (e) {
       print('Error picking video: $e');
