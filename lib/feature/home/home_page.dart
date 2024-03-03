@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             List<Widget> videoWidgets = [];
             videos?.forEach((key, video) {
               if (video['AlarmOn']) {
-                player.play(AssetSource('audio/alarm1.mp3'));
+                player.play(AssetSource('audio/002.mp3'));
               }
               videoWidgets.add(
                 Row(
