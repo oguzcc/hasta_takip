@@ -17,6 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Query _databaseReference;
+  late DatabaseReference databaseReference2;
+
   late SharedPreferences prefs;
   int remindersLength = 0;
   List<String> reminders = [];
@@ -31,6 +33,15 @@ class _HomePageState extends State<HomePage> {
     init();
     super.initState();
     _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
+    databaseReference2 =
+        FirebaseDatabase.instance.ref().child('lastVideo').child('son');
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    databaseReference2.update({'AlarmOn': false});
+    super.dispose();
   }
 
   @override
@@ -111,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       player.stop();
                       // player.dispose();
+                      databaseReference2.update({'AlarmOn': false});
                     },
                     icon: const Icon(Icons.stop, size: 32, color: Colors.red),
                   ),
