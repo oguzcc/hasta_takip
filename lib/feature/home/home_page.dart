@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     init();
     super.initState();
-    _databaseReference = FirebaseDatabase.instance.ref().child('videos');
+    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
   }
 
   @override
