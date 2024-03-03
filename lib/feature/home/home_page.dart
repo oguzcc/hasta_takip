@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     init();
     super.initState();
-    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
+    _databaseReference = FirebaseDatabase.instance.ref().child('videos');
   }
 
   @override

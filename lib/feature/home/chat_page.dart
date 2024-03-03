@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/router/show.dart';
@@ -17,16 +15,17 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late final TextEditingController controller;
 
-  List<String> randomChatMessages = [
+  List<String> chatMessages = [
     "Merhaba, nasıl yardımcı olabilirim?",
     "Sorunuzu daha net bir şekilde ifade edebilir misiniz?",
-    "Size nasıl yardımcı olabilirim?",
-    "Sorunuz hakkında daha fazla bilgi verir misiniz?",
+    "Birazdan size yardımcı olacağım.",
   ];
 
   Future<void> init() async {
     await ReminderNotifier().init();
   }
+
+  int index = 0;
 
   @override
   void initState() {
@@ -111,9 +110,11 @@ class _ChatPageState extends State<ChatPage> {
                             ReminderNotifier().addMessage(controller.text);
                             controller.clear();
                             Future.delayed(const Duration(seconds: 2), () {
-                              ReminderNotifier().addMessage(randomChatMessages[
-                                  Random()
-                                      .nextInt(randomChatMessages.length - 1)]);
+                              ReminderNotifier().addMessage(chatMessages[
+                                  // Random().nextInt(chatMessages.length - 1)
+                                  // TODO: Random olmasını istiyorsanız üstteki satırı kullanın
+                                  // TODO: Random olmasını istemiyorsanız alttaki satırı kullanın
+                                  index++ % chatMessages.length]);
                             });
                           },
                           title: 'Gönder')

@@ -8,8 +8,6 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:hasta_takip/ui_kit/style/app_padding.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() => runApp(const SocialNetworkPage());
-
 class SocialNetworkPage extends StatefulWidget {
   const SocialNetworkPage({super.key});
 
@@ -23,13 +21,13 @@ class SocialNetworkPageState extends State<SocialNetworkPage> {
   String remotePDFpath = "";
   String corruptedPathPDF = "";
 
-  final pdfs = <Map<String, String>>[
-    {"b12": "Vitamin B12 eksikliği"},
-    {"cerrahi": "Epilepsi Cerrahisi"},
-    {"epilepsi": "Epilepsi"},
-    {"gebelik": "Gebelik ve Epilepsi"},
-    {"sendrom": "Epilepsi ve Pediatrik Epilepsi Sendromları"},
-    {"yasli": "Yaşlılarda Epilepsi"}
+  final pdfs = [
+    AppPdf('b12', 'Vitamin B12 eksikliği'),
+    AppPdf('cerrahi', 'Epilepsi Cerrahisi'),
+    AppPdf('epilepsi', 'Epilepsi'),
+    AppPdf('gebelik', 'Gebelik ve Epilepsi'),
+    AppPdf('sendrom', 'Epilepsi ve Pediatrik Epilepsi Sendromları'),
+    AppPdf('yasli', 'Yaşlılarda Epilepsi')
   ];
 
   @override
@@ -116,11 +114,10 @@ class SocialNetworkPageState extends State<SocialNetworkPage> {
                     pdfs.length,
                     (index) => Card(
                       child: TextButton(
-                        child: Text(pdfs[index].values.first),
+                        child: Text(pdfs[index].title),
                         onPressed: () async {
-                          await fromAsset(
-                                  'assets/pdf/${pdfs[index].keys.first}.pdf',
-                                  '${pdfs[index]}.pdf')
+                          await fromAsset('assets/pdf/${pdfs[index].file}.pdf',
+                                  '${pdfs[index].file}.pdf')
                               .then((f) {
                             setState(() {
                               pathPDF = f.path;
@@ -132,8 +129,7 @@ class SocialNetworkPageState extends State<SocialNetworkPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PDFScreen(
-                                    path: pathPDF,
-                                    title: pdfs[index].values.first),
+                                    path: pathPDF, title: pdfs[index].title),
                               ),
                             );
                           }
@@ -296,4 +292,11 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       ),
     );
   }
+}
+
+class AppPdf {
+  final String file;
+  final String title;
+
+  AppPdf(this.file, this.title);
 }
