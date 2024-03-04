@@ -27,7 +27,7 @@ class YeniPlayer2State extends State<YeniPlayer2> {
   late VideoPlayerController _videoPlayerController;
   final String phoneNumber = "00905528246670"; // Hedef telefon numarası
   final String message =
-      "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=41.0391755,28.9996919"; // Gönderilecek mesaj
+      "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=40.7428734,30.3350489"; // Gönderilecek mesaj
 
   bool isLoading = false;
   void changeLoading() {
@@ -94,6 +94,8 @@ class YeniPlayer2State extends State<YeniPlayer2> {
 
       if (result != null) {
         File file = File(result.files.single.path!);
+        debugPrint('***************************************************');
+        debugPrint(result.files.single.path.toString());
         setState(() {
           _selectedVideo = file;
         });
