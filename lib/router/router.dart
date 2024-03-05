@@ -10,6 +10,7 @@ import 'package:hasta_takip/feature/home/chat_page.dart';
 import 'package:hasta_takip/feature/home/dusme.dart';
 import 'package:hasta_takip/feature/home/freq_asked_quest%C4%B1ons.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
+import 'package:hasta_takip/feature/home/mesajPage.dart';
 import 'package:hasta_takip/feature/home/patient_info.dart';
 import 'package:hasta_takip/feature/home/patient_info_2.dart';
 import 'package:hasta_takip/feature/home/reminder_page.dart';
@@ -37,6 +38,8 @@ final GlobalKey<NavigatorState> socialNetwork =
 final GlobalKey<NavigatorState> yeniPlayer2 =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 final GlobalKey<NavigatorState> sara2 =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+final GlobalKey<NavigatorState> mesajPage =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final goRouter = GoRouter(
@@ -164,6 +167,12 @@ final goRouter = GoRouter(
                     path: Screens.faq.path,
                     name: Screens.faq.name,
                     builder: (context, state) => const FaqPage(),
+                  ),
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: Screens.mesajPage.path,
+                    name: Screens.mesajPage.name,
+                    builder: (context, state) => MesajPage(),
                   ),
                   GoRoute(
                     parentNavigatorKey: rootNavigatorKey,

@@ -19,6 +19,7 @@ enum Screens {
   sara2('sara2', 'Sara2'),
   cameraPage('cameraPage', 'CameraPage'),
   yeniPlayer2('yeniPlayer2', 'YeniPlayer2'),
+  mesajPage('mesajPage', 'MesajPage'),
   ;
 
   const Screens(this.path, this.name);

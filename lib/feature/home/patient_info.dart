@@ -106,7 +106,9 @@ class _ProfileBottom extends StatelessWidget {
               prefixIcon: Icons.save_alt_outlined,
               title: 'Kaydedilen Makaleler',
               isLast: true,
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(Screens.mesajPage.name);
+              },
             ),
           ],
         ),
