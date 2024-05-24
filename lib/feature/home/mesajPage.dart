@@ -11,7 +11,7 @@ class MesajPage extends StatelessWidget {
       FirebaseDatabase.instance.ref().child('lastVideo').child('son');
   final String phoneNumber = "00905528246670"; // Hedef telefon numarası
   final String message =
-      "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=40.7428734,30.3350489"; // Gönderilecek mesaj
+      "__BROŞ___ Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=40.7428734,30.3350489"; // Gönderilecek mesaj
   MesajPage({super.key});
 
   void initState() {

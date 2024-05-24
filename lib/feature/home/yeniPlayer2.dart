@@ -27,7 +27,7 @@ class YeniPlayer2State extends State<YeniPlayer2> {
   late VideoPlayerController _videoPlayerController;
   final String phoneNumber = "00905528246670"; // Hedef telefon numarası
   final String message =
-      "Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=40.7428734,30.3350489"; // Gönderilecek mesaj
+      "__MOBİL__Merhabalar. şu an sara nöbeti geçirmekteyim. konumum: http://maps.google.com/maps?q=40.7428734,30.3350489"; // Gönderilecek mesaj
 
   bool isLoading = false;
   void changeLoading() {
