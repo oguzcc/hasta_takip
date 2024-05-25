@@ -26,7 +26,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Onboarding Page'),
+          title: const Text('Kayıt Ekranı'),
         ),
         body: SingleChildScrollView(
           child: Padding(

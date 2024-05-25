@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum SharedKeys { theme, lang }
+enum SharedKeys { theme, lang, reminder }
 
 class SharedClient {
   SharedClient(this._preferences);

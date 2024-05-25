@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBEVGXugj_vddMwIASIEJz9pzgt4g3TCPc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>379896314456</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.hastaTakip</string>
+	<key>PROJECT_ID</key>
+	<string>sara-cf9cb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sara-cf9cb.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:379896314456:ios:227a420d1a5ee4961d682d</string>
+	<key>DATABASE_URL</key>
+	<string>https://sara-cf9cb-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

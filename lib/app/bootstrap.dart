@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hasta_takip/firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../core/bloc/lang/lang_manager.dart';
@@ -24,6 +26,9 @@ Future<void> bootstrap(
 
   // Add cross-flavor configuration here
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await EasyLocalization.ensureInitialized();
   // await FlutterMapTileCaching.initialise();
   //TODO: error on android cause of isar nosqldb (research)

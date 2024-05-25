@@ -1,58 +1,222 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/core/util/extension/context_ext.dart';
 import 'package:hasta_takip/router/screens.dart';
+import 'package:hasta_takip/router/show.dart';
 import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Query _databaseReference;
+  late DatabaseReference databaseReference2;
+
+  late SharedPreferences prefs;
+  int remindersLength = 0;
+  List<String> reminders = [];
+  final player = AudioPlayer();
+
+  Future<void> init() async {
+    await ReminderNotifier().init();
+  }
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+    _databaseReference = FirebaseDatabase.instance.ref().child('lastVideo');
+    databaseReference2 =
+        FirebaseDatabase.instance.ref().child('lastVideo').child('son');
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    databaseReference2.update({'AlarmOn': false});
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Icon(Icons.home, size: 50),
-        toolbarHeight: 100,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Hasta Adi'),
-            Text(
-              'GUNAYDIN',
-              style: context.textTheme.title1Medium,
-            ),
-            Gap.verLG,
-            const Text('Son Nobetiniz'),
-            Gap.verLG,
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24.0),
-                child: Row(
+      body: StreamBuilder(
+        stream: _databaseReference.onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Hata: ${snapshot.error}');
+          } else {
+            // Verileri al ve ListView.builder ile listele
+            Map<dynamic, dynamic>? videos =
+                snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
+
+            List<Widget> videoWidgets = [];
+            videos?.forEach((key, video) {
+              if (video['AlarmOn']) {
+                player.play(AssetSource('audio/002.mp3'));
+              }
+              videoWidgets.add(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _InfoCircle(label: '12/12/2023'),
-                    _InfoCircle(label: 'Kadikoy'),
-                    _InfoCircle(label: '5 dk'),
+                    _InfoCircle(
+                        label: IconButton(
+                            onPressed: () {
+                              context.pushNamed(
+                                  Screens.seizureRecordsVideo.name,
+                                  pathParameters: {'url': video['fileURL']});
+                            },
+                            icon: const Icon(Icons.play_circle_fill_outlined,
+                                size: 40))),
+                    _InfoCircle(label: Text(video['sure'])),
+                    _InfoCircle(label: Text(video['date'])),
+                    //DateFormat('dd/MM/yyyy').format(DateTime.now()))),
                   ],
                 ),
+              );
+            });
+
+            return Scaffold(
+              appBar: AppBar(
+                title: const Icon(Icons.home, size: 40),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      Show.dialog(
+                        context,
+                        AlertDialog(
+                          title: const Text('Uyarı'),
+                          content: const Text('Tüm hatırlatmalar silinecek.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                context.pop();
+                              },
+                              child: const Text('Hayır'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ReminderNotifier().deleteAll();
+                                context.pop();
+                                setState(() {});
+                              },
+                              child: const Text('Evet'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.delete_forever_outlined,
+                        size: 32, color: Colors.red),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      player.stop();
+                      // player.dispose();
+                      databaseReference2.update({'AlarmOn': false});
+                    },
+                    icon: const Icon(Icons.stop, size: 32, color: Colors.red),
+                  ),
+                ],
               ),
-            ),
-            Gap.verLG,
-            Text(
-              'Hatirlatmalar',
-              style: context.textTheme.title1Medium,
-            ),
-            Gap.verLG,
-            const Text('• Ilacinizi almayi unutmayin'),
-            Gap.verLG,
-            const Text('• Gunluk egzersiz yapmayi unutmayin'),
-            Gap.verLG,
-            const Text('• Yaklasan bir doktor randevunuz var'),
-          ],
-        ),
+              body: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/image/bg_light.jpeg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListenableBuilder(
+                      listenable: ReminderNotifier(),
+                      builder: (context, child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Epilepsi Hastasi 1'),
+                            Text(
+                              'GUNAYDIN',
+                              style: context.textTheme.title1Medium,
+                            ),
+                            Gap.verXS,
+                            const Text('Son Nobetiniz'),
+                            Gap.verXS,
+                            Text('Nöbet Sıklığı: ${ReminderNotifier().freq}'),
+                            Gap.verXS,
+                            Card(
+                              color: Colors.transparent,
+                              elevation: 0,
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 24.0),
+                                  child: videoWidgets.first),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: SafeArea(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Gap.verLG,
+                                      Text(
+                                        'Hatırlatmalar',
+                                        style: context.textTheme.title1Medium,
+                                      ),
+                                      ...ReminderNotifier()
+                                          .reminders
+                                          .map((e) => Column(
+                                                children: [
+                                                  Gap.verXS,
+                                                  Text(
+                                                    '• $e',
+                                                    style:
+                                                        context.text.bodyLarge,
+                                                  ),
+                                                ],
+                                              ))
+                                          .toList(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                ),
+              ),
+              floatingActionButton: Stack(
+                children: [
+                  Positioned(
+                    right: 0,
+                    bottom: 90,
+                    child: FloatingActionButton.large(
+                      heroTag: '12312',
+                      backgroundColor: Colors.red,
+                      shape: const CircleBorder(),
+                      onPressed: () => context.pushNamed(Screens.dusme.name),
+                      // child: const Icon(
+                      //   Icons.arrow_downward,
+                      //   color: Colors.white,
+                      // ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -61,14 +225,14 @@ class HomePage extends StatelessWidget {
 class _InfoCircle extends StatelessWidget {
   const _InfoCircle({required this.label});
 
-  final String label;
+  final Widget label;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundColor: Colors.black12,
+      backgroundColor: Colors.white70,
       radius: 50,
-      child: Text(label),
+      child: label,
     );
   }
 }
@@ -131,5 +295,68 @@ class _DrawerTile extends StatelessWidget {
       title: Text(title),
       onTap: onTap,
     );
+  }
+}
+
+class ReminderNotifier extends ChangeNotifier {
+  // Singleton
+  static final ReminderNotifier _instance = ReminderNotifier._internal();
+  factory ReminderNotifier() => _instance;
+  ReminderNotifier._internal();
+
+  late SharedPreferences prefs;
+  int remindersLength = 0;
+  List<String> reminders = [];
+  List<String> chat = [];
+  String freq = '';
+
+  Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
+    reminders = prefs.getStringList('reminders') ?? [];
+    freq = prefs.getString('freq') ?? '';
+    chat = prefs.getStringList('chat') ?? [];
+    notifyListeners();
+  }
+
+  void setFreq(String freq) {
+    this.freq = freq;
+    prefs.setString('freq', freq);
+    notifyListeners();
+  }
+
+  void addReminder(String reminder) {
+    reminders.add(reminder);
+    prefs.setStringList('reminders', reminders);
+    notifyListeners();
+  }
+
+  void deleteReminder(String reminder) {
+    reminders.remove(reminder);
+    prefs.setStringList('reminders', reminders);
+    notifyListeners();
+  }
+
+  void addMessage(String message) {
+    chat.add(message);
+    prefs.setStringList('chat', chat);
+    notifyListeners();
+  }
+
+  void deleteMessage(String message) {
+    chat.remove(message);
+    prefs.setStringList('chat', chat);
+    notifyListeners();
+  }
+
+  void deleteChat() {
+    chat.clear();
+    notifyListeners();
+  }
+
+  void deleteAll() {
+    reminders.clear();
+    freq = '';
+    prefs.clear();
+    notifyListeners();
   }
 }
