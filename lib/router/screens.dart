@@ -20,6 +20,8 @@ enum Screens {
   cameraPage('cameraPage', 'CameraPage'),
   yeniPlayer2('yeniPlayer2', 'YeniPlayer2'),
   mesajPage('mesajPage', 'MesajPage'),
+
+  patientDetail('patientDetail', 'PatientDetail'),
   ;
 
   const Screens(this.path, this.name);

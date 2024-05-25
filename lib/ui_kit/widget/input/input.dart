@@ -111,6 +111,10 @@ class Input extends StatelessWidget {
         ),
       );
 
+  factory Input.basic(
+          {required String label, required TextEditingController controller}) =>
+      Input._(input: InputBasic(label: label, controller: controller));
+
   final Widget input;
 
   @override
@@ -206,6 +210,21 @@ class TextInputValidationError extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class InputBasic extends StatelessWidget {
+  const InputBasic({super.key, required this.label, required this.controller});
+
+  final String label;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Input(
+      controller: controller,
+      decoration: InputDecoration(label: Text(label)),
     );
   }
 }

@@ -3,9 +3,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hasta_takip/core/util/extension/context_ext.dart';
+import 'package:hasta_takip/feature/home/model/patient_model.dart';
 import 'package:hasta_takip/router/screens.dart';
 import 'package:hasta_takip/router/show.dart';
 import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:hasta_takip/ui_kit/widget/button/button.dart';
+import 'package:hasta_takip/ui_kit/widget/input/input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +21,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Query _databaseReference;
   late DatabaseReference databaseReference2;
+  late TextEditingController name;
+  late TextEditingController email;
+  late TextEditingController phone;
+  late TextEditingController gender;
+  late TextEditingController age;
+  late TextEditingController weight;
+  late TextEditingController bloodType;
 
   late SharedPreferences prefs;
   int remindersLength = 0;
@@ -25,6 +35,13 @@ class _HomePageState extends State<HomePage> {
   final player = AudioPlayer();
 
   Future<void> init() async {
+    name = TextEditingController();
+    email = TextEditingController();
+    phone = TextEditingController();
+    gender = TextEditingController();
+    age = TextEditingController();
+    weight = TextEditingController();
+    bloodType = TextEditingController();
     await ReminderNotifier().init();
   }
 
@@ -106,8 +123,8 @@ class _HomePageState extends State<HomePage> {
                             TextButton(
                               onPressed: () {
                                 ReminderNotifier().deleteAll();
-                                context.pop();
                                 setState(() {});
+                                context.pop();
                               },
                               child: const Text('Evet'),
                             ),
@@ -143,7 +160,93 @@ class _HomePageState extends State<HomePage> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Epilepsi Hastasi 1'),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                ...List.generate(patientList.length, (index) {
+                                  return HastaChip(
+                                    label: patientList[index].name,
+                                    onTap: () {
+                                      context.pushNamed(
+                                          Screens.patientDetail.name,
+                                          pathParameters: {
+                                            'patientId': patientList[index].id
+                                          });
+                                    },
+                                  );
+                                }),
+                                HastaChip(
+                                    label: '+ Hasta Ekle',
+                                    onTap: () {
+                                      Show.dialog(
+                                        context,
+                                        AlertDialog(
+                                          title: const Text('Hasta Ekle'),
+                                          content: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Input.name(controller: name),
+                                              Input.basic(
+                                                  label: 'E posta',
+                                                  controller: email),
+                                              Input.basic(
+                                                  label: 'Telefon',
+                                                  controller: phone),
+                                              Input.basic(
+                                                  label: 'Cinsiyet',
+                                                  controller: gender),
+                                              Input.basic(
+                                                  label: 'Yaş',
+                                                  controller: age),
+                                              Input.basic(
+                                                  label: 'Kilo',
+                                                  controller: weight),
+                                              Input.basic(
+                                                  label: 'Kan Grubu',
+                                                  controller: bloodType),
+                                            ],
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                context.pop();
+                                              },
+                                              child: const Text('İptal'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                patientList.add(PatientModel(
+                                                  id: patientList.length
+                                                      .toString(),
+                                                  name: name.text,
+                                                  email: email.text,
+                                                  phone: phone.text,
+                                                  gender: gender.text,
+                                                  age: age.text,
+                                                  weight: weight.text,
+                                                  bloodType: bloodType.text,
+                                                ));
+                                                name.clear();
+                                                email.clear();
+                                                phone.clear();
+                                                gender.clear();
+                                                age.clear();
+                                                weight.clear();
+                                                bloodType.clear();
+                                                setState(() {});
+                                                context.pop();
+                                              },
+                                              child: const Text('Ekle'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              ],
+                            ),
+                            Gap.verMD,
                             Text(
                               'GUNAYDIN',
                               style: context.textTheme.title1Medium,
@@ -219,6 +322,18 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+}
+
+class HastaChip extends StatelessWidget {
+  const HastaChip({super.key, required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Button.filled(onPressed: onTap, title: label);
   }
 }
 
@@ -360,3 +475,16 @@ class ReminderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+List<PatientModel> patientList = [
+  PatientModel(
+    id: '0',
+    name: 'Ali',
+    email: 'ali@gmail.com',
+    phone: '1234567890',
+    gender: 'Erkek',
+    age: '23',
+    bloodType: 'A+',
+    weight: '70',
+  ),
+];

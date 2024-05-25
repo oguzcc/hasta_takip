@@ -20,7 +20,7 @@ class _InputName extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: error ? context.colorScheme.errorContainer : null,
             label: Text(
-              isFirstName ? 'First Name' : 'Last Name',
+              isFirstName ? 'İsim' : 'Last Name',
             ),
             suffixIcon: _controller.text.isNotEmpty
                 ? _ClearName(controller: _controller, isFirstName: isFirstName)
@@ -60,7 +60,7 @@ class _ClearName extends StatelessWidget {
     return IconButton(
       onPressed: _controller.clear,
       icon: const Icon(
-        NyIcons.cross_filled,
+        Icons.close,
         color: Color(0x571A282F),
       ),
     );

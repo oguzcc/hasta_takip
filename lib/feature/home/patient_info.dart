@@ -85,7 +85,7 @@ class _ProfileBottom extends StatelessWidget {
           profileTiles: [
             _ProfileTile(
               prefixIcon: Icons.person_outline_outlined,
-              title: 'Hasta Bilgileri',
+              title: 'Kullanıcı Bilgileri',
               onTap: () {
                 context.pushNamed(Screens.patientInfo2.name);
               },
@@ -96,18 +96,16 @@ class _ProfileBottom extends StatelessWidget {
               onTap: () {},
             ),
             _ProfileTile(
+              prefixIcon: Icons.save_alt_outlined,
+              title: 'Yayınlanan Makaleler',
+              isLast: true,
+              onTap: () {},
+            ),
+            _ProfileTile(
               prefixIcon: Icons.chat_bubble_outline_outlined,
               title: 'Chat',
               onTap: () {
                 context.pushNamed(Screens.chat.name);
-              },
-            ),
-            _ProfileTile(
-              prefixIcon: Icons.save_alt_outlined,
-              title: 'Kaydedilen Makaleler',
-              isLast: true,
-              onTap: () {
-                context.pushNamed(Screens.mesajPage.name);
               },
             ),
           ],

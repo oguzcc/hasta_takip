@@ -11,6 +11,7 @@ import 'package:hasta_takip/feature/home/dusme.dart';
 import 'package:hasta_takip/feature/home/freq_asked_quest%C4%B1ons.dart';
 import 'package:hasta_takip/feature/home/home_page.dart';
 import 'package:hasta_takip/feature/home/mesajPage.dart';
+import 'package:hasta_takip/feature/home/patient_detail.dart';
 import 'package:hasta_takip/feature/home/patient_info.dart';
 import 'package:hasta_takip/feature/home/patient_info_2.dart';
 import 'package:hasta_takip/feature/home/reminder_page.dart';
@@ -84,6 +85,14 @@ final goRouter = GoRouter(
                     path: Screens.dusme.path,
                     name: Screens.dusme.name,
                     builder: (context, state) => const Dusme(),
+                  ),
+                  GoRoute(
+                    parentNavigatorKey: rootNavigatorKey,
+                    path: '${Screens.patientDetail.path}/:patientId',
+                    name: Screens.patientDetail.name,
+                    builder: (context, state) => PatientDetail(
+                      patientId: state.pathParameters['patientId']!,
+                    ),
                   ),
                 ]),
           ],

@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:hasta_takip/router/show.dart';
 import 'package:hasta_takip/ui_kit/style/app_padding.dart';
+import 'package:hasta_takip/ui_kit/style/gap.dart';
+import 'package:hasta_takip/ui_kit/widget/button/button.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SocialNetworkPage extends StatefulWidget {
@@ -110,6 +113,9 @@ class SocialNetworkPageState extends State<SocialNetworkPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  const AddArticle(title: 'Yazı Ekle'),
+                  const AddArticle(title: 'Makale Yükle'),
+
                   ...List.generate(
                     pdfs.length,
                     (index) => Card(
@@ -299,4 +305,51 @@ class AppPdf {
   final String title;
 
   AppPdf(this.file, this.title);
+}
+
+class AddArticle extends StatelessWidget {
+  const AddArticle({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Button.filledIcon(
+            onPressed: () {
+              Show.modal(
+                  context,
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: const Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add, size: 40),
+                              Text('Makale Yükleme Alanı'),
+                            ],
+                          )),
+                        ),
+                        const SizedBox(height: 150)
+                      ],
+                    ),
+                  ));
+            },
+            title: title,
+            icon: const Icon(Icons.add)),
+        Gap.verSM,
+      ],
+    );
+  }
 }
